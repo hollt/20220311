@@ -30,8 +30,11 @@ public class MemberController {
 	}
 
 	@PostMapping("/memberSelect.do")
-	public String memberSelect(Model model, MemberVO vo) {
+	public String memberSelect(Model model, MemberVO vo,LogVO logVo) {
 		vo = memberDao.memberSelect(vo);
+		logVo.setId("micol");
+		logVo.setAction("R");
+		logDao.insertLog(logVo);
 		if (vo != null) {
 			model.addAttribute("member", vo);
 			return "member/memberSelect";

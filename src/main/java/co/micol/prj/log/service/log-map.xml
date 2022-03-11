@@ -7,9 +7,10 @@
    </select>
    <insert id="insertLog" parameterType="co.micol.prj.log.service.LogVO">
       <selectKey keyProperty="logId" resultType="int" order="BEFORE">
-         SELECT MAX(LOGID) + 1 FROM LOGTABLE
+         SELECT MAX(LOGID) + 1 AS LOGID FROM LOGTABLE
       </selectKey>
       INSERT INTO LOGTABLE
       VALUES(#{logId},#{id},#{action},sysdate)
    </insert>
+
 </mapper>
