@@ -21,10 +21,10 @@ public class MemberController {
 	private LogService logDao;
 	
 	@RequestMapping("memberList.do")
-	public String memberList(Model model,HttpSession session,LogVO logVo) {
-		logVo.setId((String) session.getAttribute("id"));
-		logVo.setAction("R");
-		logDao.insertLog(logVo);
+	public String memberList(Model model,/*HttpSession session,*/LogVO logVo) {
+//		logVo.setId((String) session.getAttribute("id"));
+//		logVo.setAction("R");
+//		logDao.insertLog(logVo);
 		model.addAttribute("members", memberDao.memberSelectList());
 		return "member/memberList";
 	}
@@ -90,6 +90,28 @@ public class MemberController {
 		}
 			return "member/memberError";
 	}
+	@RequestMapping("memberLoginForm.do")
+	public String memberLoginForm() {
+		return "member/memberLoginForm";
+	}
 	
+	@PostMapping("memberLogin.do")
+	public String memberLogin(MemberVO vo, Model model,HttpSession session) {
+		
+		vo =  memberDao.memberSelect(vo);	
+		if(vo != null) {
+			session.setAttribute("sessionId", vo.getId());
+			model.addAttribute("message",vo.getName() + "님 환영합니다." );
+			
+		}else {
+			model.addAttribute("message", "아이디 또는 패스워드가 틀립니다");
+		}
+		return "member/memberLogin";
+	}
+	@RequestMapping("/memberLogout.do")
+	public String memberLogout(HttpSession session) {
+		session.invalidate();
+		return "redirect:home.do";
+	}
 	
 }
